@@ -1,22 +1,44 @@
 package com.jcaraballo.funfacts;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import java.util.Random;
 
 public class FunFactsActivity extends AppCompatActivity {
 
     public static final String TAG = FunFactsActivity.class.getSimpleName();
+    private static final String KEY_FACT = "KEY_FACT" ;
+    private static final String KEY_COLOR = "KEY_COLOR";
+    private String mFact;
+    private int mColor;
+
+    private TextView factLabel;
+    private Button showFactButton;
+    private RelativeLayout bg;
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putString(KEY_FACT, mFact);
+        outState.putInt(KEY_COLOR, mColor);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        mFact = savedInstanceState.getString(KEY_FACT);
+        factLabel.setText(mFact);
+        mColor = savedInstanceState.getInt(KEY_COLOR);
+        bg.setBackgroundColor(mColor);
+        showFactButton.setTextColor(mColor);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,25 +46,28 @@ public class FunFactsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_fun_facts);
 
         // Declare our view variables and assign them the views from the layout file
-        final TextView factLabel = (TextView) findViewById(R.id.factTextView);
-        final Button showFactButton = (Button) findViewById(R.id.showFactButton);
-        final RelativeLayout bg = (RelativeLayout) findViewById(R.id.bg);
+        factLabel = (TextView) findViewById(R.id.factTextView);
+        showFactButton = (Button) findViewById(R.id.showFactButton);
+        bg = (RelativeLayout) findViewById(R.id.bg);
 
-        ColorWheel.setColors(bg, showFactButton);
+        mFact = FactBook.getFact();
+        factLabel.setText(mFact);
+
+        mColor = ColorWheel.getColor();
+        bg.setBackgroundColor(mColor);
+        showFactButton.setTextColor(mColor);
 
         showFactButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Update the background color and the button text color
-                ColorWheel.setColors(bg, showFactButton);
+                mFact = FactBook.getFact();
+                factLabel.setText(mFact);
 
-                // Update the label with our dynamic fact
-                factLabel.setText(FactBook.getFact());
+                mColor = ColorWheel.getColor();
+                bg.setBackgroundColor(mColor);
+                showFactButton.setTextColor(mColor);
             }
         });
-
-        //Toast.makeText(this, "Yay! Our Activity was created!", Toast.LENGTH_LONG).show();
-        Log.d(TAG, "Logging from the OnCreate method!");
     }
 
     @Override

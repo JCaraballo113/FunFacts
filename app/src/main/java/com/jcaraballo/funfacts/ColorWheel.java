@@ -1,8 +1,6 @@
 package com.jcaraballo.funfacts;
 
 import android.graphics.Color;
-import android.widget.Button;
-import android.widget.RelativeLayout;
 
 import java.util.Random;
 
@@ -33,11 +31,4 @@ public class ColorWheel {
 
         return Color.parseColor(mColors[randColor]);
     }
-
-    public static void setColors(RelativeLayout bg, Button btn){
-        int randomColor = getColor();
-        bg.setBackgroundColor(randomColor);
-        btn.setTextColor(randomColor);
-    }
-
 }
